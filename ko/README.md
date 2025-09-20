@@ -58,6 +58,30 @@ new Ticker(onTick: (deltaTime: number) => void, fps?: number)
 * 만약 브라우저가 일시적으로 멈춰서(`lag`) 시간이 많이 지났다면, 누락된 스텝만큼 catch-up 호출을 수행합니다.
   lag가 `2 * fixedStep` 이상이면 추가로 한 번 더 `onTick`을 호출하여 게임 로직이 과도하게 늦춰지는 것을 방지합니다.
 
+## 오류 처리
+
+* `onTick` 내부에서 예외가 발생하더라도 루프는 중단되지 않고 다음 프레임이 예약됩니다.
+* 예외는 `console.error`로 출력되며, `prevTime`은 항상 현재 프레임 시간으로 갱신되므로 다음 프레임에서 `deltaTime`이 비정상적으로 커지지 않습니다.
+
+```ts
+const ticker = new Ticker(() => {
+  throw new Error('테스트용 에러')
+})
+// 콘솔에 에러가 표시되지만 루프는 계속 동작합니다.
+```
+
+## 탭 비활성화 시 큰 deltaTime 처리
+
+브라우저 탭이 비활성화되면 `requestAnimationFrame` 호출 간격이 길어져 복귀 시 큰 `deltaTime`이 발생할 수 있습니다.
+이 값은 기본적으로 **클램프되지 않습니다.** 필요하다면 직접 제한하세요.
+
+```ts
+const MAX_DT = 1 / 15 // 최소 15FPS 보장
+const ticker = new Ticker((dt) => {
+  update(Math.min(dt, MAX_DT))
+})
+```
+
 ## 테스트
 
 이 패키지는 [Jest](https://jestjs.io/) 환경에서 테스트됩니다.

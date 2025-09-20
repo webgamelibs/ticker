@@ -60,6 +60,30 @@ new Ticker(onTick: (deltaTime: number) => void, fps?: number)
 
 This design ensures a consistent update rate for game logic while still using `requestAnimationFrame` for smooth rendering.
 
+## Error Handling
+
+* If `onTick` throws, the error is logged via `console.error` but the loop **keeps running**.
+* `prevTime` is always updated in `finally`, so the next `deltaTime` is not inflated by the failed frame.
+
+```ts
+const ticker = new Ticker(() => {
+  throw new Error('Test error')
+})
+// The error is logged, but the game loop continues.
+```
+
+## Handling Large deltaTime After Tab Switch
+
+`requestAnimationFrame` pauses or slows in inactive tabs, which may produce very large `deltaTime` values once the tab becomes active again.
+Ticker does not clamp these values by default — clamp manually if needed:
+
+```ts
+const MAX_DT = 1 / 15 // Clamp to 15 FPS minimum
+const ticker = new Ticker((dt) => {
+  update(Math.min(dt, MAX_DT))
+})
+```
+
 ## Testing
 
 This package is tested with [Jest](https://jestjs.io/).
