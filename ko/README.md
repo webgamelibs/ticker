@@ -54,7 +54,7 @@ new Ticker(onTick: (deltaTime: number) => void, fps?: number)
 
 ## FPS Cap 동작 방식
 
-* FPS 제한이 설정되어 있으면 \*\*고정된 시간 간격(`1 / fps`)\*\*으로만 `onTick`이 호출됩니다.
+* FPS 제한이 설정되어 있으면 **고정된 시간 간격(`1 / fps`)**으로만 `onTick`이 호출됩니다.
 * 만약 브라우저가 일시적으로 멈춰서(`lag`) 시간이 많이 지났다면, 누락된 스텝만큼 catch-up 호출을 수행합니다.
   lag가 `2 * fixedStep` 이상이면 추가로 한 번 더 `onTick`을 호출하여 게임 로직이 과도하게 늦춰지는 것을 방지합니다.
 
@@ -66,10 +66,10 @@ new Ticker(onTick: (deltaTime: number) => void, fps?: number)
 yarn add --dev jest ts-jest @types/jest jest-environment-jsdom
 ```
 
-간단한 예시 테스트 (전체 예시는 `__tests__/Ticker.spec.ts` 참고):
+간단한 예시 테스트 (전체 예시는 `src/ticker.test.ts` 참고):
 
 ```ts
-import { Ticker } from '../Ticker'
+import { Ticker } from './ticker'
 
 test('Ticker는 deltaTime을 onTick에 전달한다', () => {
   const onTick = jest.fn()
@@ -85,4 +85,4 @@ test('Ticker는 deltaTime을 onTick에 전달한다', () => {
 
 ## 라이선스
 
-MIT License.
+MIT License

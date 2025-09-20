@@ -71,7 +71,7 @@ yarn add --dev jest ts-jest @types/jest jest-environment-jsdom
 Minimal example:
 
 ```ts
-import { Ticker } from '../Ticker'
+import { Ticker } from './ticker'
 
 test('Ticker passes deltaTime to onTick', () => {
   const onTick = jest.fn()
@@ -84,8 +84,8 @@ test('Ticker passes deltaTime to onTick', () => {
 })
 ```
 
-For a full-featured test suite (including FPS cap scenarios and cancellation), see `__tests__/Ticker.spec.ts`.
+For a full-featured test suite (including FPS cap scenarios and cancellation), see `src/ticker.test.ts`.
 
 ## License
 
-MIT License.
+MIT License
